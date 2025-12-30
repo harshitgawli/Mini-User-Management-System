@@ -29,3 +29,12 @@ export const userLoginValidationSchema = Joi.object({
     "any.required": "Password is required",
   }),
 });
+
+export const updateProfileValidationSchema = Joi.object({
+  fullName: Joi.string().trim().min(3).required().messages({
+    "any.required": "Full name is required",
+  }),
+  email: Joi.string().email().required().messages({
+    "any.required": "Email is required",
+  }),
+});

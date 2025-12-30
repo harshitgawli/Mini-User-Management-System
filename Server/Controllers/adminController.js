@@ -32,7 +32,7 @@ AdminControllers.getAllUsers = async (req, res) => {
 AdminControllers.activateUser = async (req, res) => {
   try {
     const { userId } = req.params;
-
+   
     const result = await AdminServices.updateUserStatus(userId, "active");
 
     if (result.status === "ERR") {
@@ -55,7 +55,7 @@ AdminControllers.activateUser = async (req, res) => {
 AdminControllers.deactivateUser = async (req, res) => {
   try {
     const { userId } = req.params;
-
+    
     const result = await AdminServices.updateUserStatus(userId, "inactive");
 
     if (result.status === "ERR") {

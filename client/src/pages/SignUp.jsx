@@ -7,25 +7,33 @@ const Signup = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!form.fullName || !form.email || !form.password || !form.confirmPassword)
-      return setError("All fields are required");
+  if (!form.fullName || !form.email || !form.password || !form.confirmPassword)
+    return setError("All fields are required");
 
-    if (form.password.length < 8)
-      return setError("Password must be at least 8 characters");
+  if (form.password.length < 6)
+    return setError("Password must be at least 6 characters");
 
-    if (form.password !== form.confirmPassword)
-      return setError("Passwords do not match");
+  if (form.password !== form.confirmPassword)
+    return setError("Passwords do not match");
 
-    try {
-      await api.post("/auth/signup", form);
-      navigate("/login");
-    } catch (err) {
-      setError(err.response?.data?.message || "Signup failed");
-    }
-  };
+  try {
+    const payload = {
+      fullName: form.fullName,
+      email: form.email,
+      password: form.password,
+    };
+
+    await api.post("/users/signup", payload);
+    navigate("/login");
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    setError(err.response?.data?.message || "Signup failed");
+  }
+};
+
 
   return (
     <div className="auth-box">

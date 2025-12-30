@@ -130,7 +130,7 @@ userControllers.login = async (req, res) => {
     return res.status(200).send({
       status: "OK",
       msg: "User login successfully",
-      data: [userObj],
+      data:{ token ,user:userObj},
     });
   } catch (err) {
     return res.status(500).send({
@@ -235,7 +235,7 @@ userControllers.updateProfile = async (req, res) => {
     return res.status(200).send({
       status: "OK",
       msg: "Profile updated successfully",
-      data: [userObj],
+      data: userObj,
     });
   } catch (err) {
     return res.status(500).send({

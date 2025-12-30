@@ -59,7 +59,7 @@ AdminServices.updateUserStatus = async (userId, status) => {
     return {
       status: "OK",
       msg: `User ${status} successfully`,
-      data: [],
+      data: user, // ✅ RETURN UPDATED USER
     };
   } catch (err) {
     return {
@@ -69,5 +69,6 @@ AdminServices.updateUserStatus = async (userId, status) => {
     };
   }
 };
+
 
 export default AdminServices;

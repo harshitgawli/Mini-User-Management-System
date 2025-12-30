@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AuthContext } from "../auth/AuthContext";
+import { AuthContext } from "../auth/AuthProvider";
 import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {

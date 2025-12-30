@@ -3,7 +3,7 @@ import Login from "./pages/Login.jsx";
 import Signup from "./pages/SignUp.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import ProtectedRoute from "./components/PotectedRoutes.jsx";
 import { AuthProvider } from "./auth/AuthContext.jsx";
 
 function App() {

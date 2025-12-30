@@ -20,7 +20,8 @@ const Login = () => {
 
     try {
       setLoading(true);
-      const res = await api.post("/auth/login", { email, password });
+      const res = await api.post("/users/login", { email, password });
+      console.log("LOGIN DATA:", res.data.data);
       login(res.data.data);
 
       res.data.data.user.role === "admin"
@@ -51,7 +52,7 @@ const Login = () => {
       </form>
 
       <p>
-        Don’t have an account? <Link to="/signup">Signup</Link>
+        Don't have an account? <Link to="/signup">Signup</Link>
       </p>
     </div>
   );

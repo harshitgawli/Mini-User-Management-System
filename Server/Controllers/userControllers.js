@@ -5,6 +5,8 @@ import { generateToken } from "../utils/token/generateToken.js";
 import {
   userSignUpValidationSchema,
   userLoginValidationSchema,
+  updateProfileValidationSchema,
+  changePasswordValidationSchema,
 } from "../Validations/UserValidation.js";
 
 const userControllers = {};
@@ -199,6 +201,114 @@ userControllers.logout = async (req, res) => {
 };
 
 
+
+// import { updateProfileValidationSchema } from "../Validations/userValidations.js";
+
+userControllers.updateProfile = async (req, res) => {
+  try {
+    const { error, value } =
+      updateProfileValidationSchema.validate(req.body);
+
+    if (error) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: error.message,
+        data: [],
+      });
+    }
+
+    const result = await UserServices.updateProfile(req.user.id, value);
+
+    if (result.status === "ERR") {
+      return res.status(400).send(result);
+    }
+    if (!result.data || !result.data[0]) {
+       return res.status(404).send({
+    status: "ERR",
+    msg: "User not found",
+    data: [],
+  });
+}
+    const userObj = result.data[0].toObject();
+    delete userObj.password;
+
+    return res.status(200).send({
+      status: "OK",
+      msg: "Profile updated successfully",
+      data: [userObj],
+    });
+  } catch (err) {
+    return res.status(500).send({
+      status: "ERR",
+      msg: err.message,
+      data: [],
+    });
+  }
+};
+
+
+
+
+userControllers.changePassword = async (req, res) => {
+  try {
+    const { error, value } =
+      changePasswordValidationSchema.validate(req.body);
+
+    if (error) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: error.message,
+        data: [],
+      });
+    }
+
+    // 🔥 Fetch user safely
+    const userRes = await UserServices.getUserByEmail(req.user.email);
+
+    if (userRes.status === "ERR") {
+      return res.status(500).send(userRes);
+    }
+
+    if (!userRes.data || userRes.data.length === 0) {
+      return res.status(404).send({
+        status: "ERR",
+        msg: "User not found",
+        data: [],
+      });
+    }
+
+    const user = userRes.data[0];
+
+    // 🔐 Verify old password
+    const isMatch = await verifyPassword(
+      value.oldPassword,
+      user.password
+    );
+
+    if (!isMatch) {
+      return res.status(400).send({
+        status: "ERR",
+        msg: "Old password is incorrect",
+        data: [],
+      });
+    }
+
+    const hashed = await hashPassword(value.newPassword);
+
+    const result = await UserServices.changePassword(
+      req.user.id,
+      hashed
+    );
+
+    return res.status(200).send(result);
+  } catch (err) {
+    return res.status(500).send({
+      status: "ERR",
+      msg: err.message,
+      data: [],
+    });
+  }
+};
 
 
 export default userControllers;

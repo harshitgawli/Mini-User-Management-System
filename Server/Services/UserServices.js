@@ -90,4 +90,64 @@ UserServices.updateLastLogin = async (userId) => {
   }
 };
 
+
+// update profile
+UserServices.updateProfile = async (userId, { fullName, email }) => {
+  try {
+    const emailExists = await User.findOne({
+      email,
+      _id: { $ne: userId },
+    });
+
+    if (emailExists) {
+      return {
+        status: "ERR",
+        msg: "Email already in use",
+        data: [],
+      };
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { fullName, email },
+      { new: true }
+    );
+
+    if (!user) {
+      return {
+        status: "ERR",
+        msg: "User not found",
+        data: [],
+      };
+    }
+
+    return {
+      status: "OK",
+      msg: "Profile updated successfully",
+      data: [user],
+    };
+  } catch (err) {
+    return { status: "ERR", msg: err.message, data: [] };
+  }
+};
+
+
+// change pwd
+UserServices.changePassword = async (userId, newPassword) => {
+  try {
+    await User.findByIdAndUpdate(userId, {
+      password: newPassword,
+    });
+
+    return {
+      status: "OK",
+      msg: "Password changed successfully",
+      data: [],
+    };
+  } catch (err) {
+    return { status: "ERR", msg: err.message, data: [] };
+  }
+};
+
+
 export default UserServices;

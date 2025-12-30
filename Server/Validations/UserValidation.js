@@ -38,3 +38,8 @@ export const updateProfileValidationSchema = Joi.object({
     "any.required": "Email is required",
   }),
 });
+
+export const changePasswordValidationSchema = Joi.object({
+  oldPassword: Joi.string().required(),
+  newPassword: Joi.string().min(6).required(),
+});
